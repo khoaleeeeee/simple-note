@@ -8,8 +8,6 @@
 	const suggestion = utils.createAutocomplete({ editableDiv });
 	const vim = utils.createVim({ editableDiv });
 
-	document.addEventListener('removeSuggestion', suggestion.removeSuggestion());
-
 	$: open = $sidebar.expanded;
 
 	$: if ($note && editableDiv) {
@@ -19,6 +17,7 @@
 	}
 
 	$: if (editableDiv) {
+		document.addEventListener('removeSuggestion', suggestion.removeSuggestion());
 		if (!contentLoaded) {
 			editableDiv.innerText = $content;
 			vim.setEditableDiv(editableDiv);
