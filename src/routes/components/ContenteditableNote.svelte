@@ -1,52 +1,60 @@
 <script>
 	import { size, sidebar } from '$lib/stores';
-	import { autocomplete, title, content, notes, note } from '$lib/stores';
+	import { autocomplete, notes, note } from '$lib/stores';
 	import utils from '$lib/utils';
+	import { onMount } from 'svelte';
 
 	let editableDiv;
 	let contentLoaded = false;
+	let oldContent = '';
 	const suggestion = utils.createAutocomplete({ editableDiv });
 	const vim = utils.createVim({ editableDiv });
 
-	document.addEventListener('removeSuggestion', suggestion.removeSuggestion());
+	let title = 'New Note';
+
+	$: if ($note) title = $note?.title;
 
 	$: open = $sidebar.expanded;
 
+	onMount(() => {
+		document.addEventListener('removeSuggestion', suggestion.removeSuggestion);
+		document.addEventListener('insertSuggestion', saveNote);
+	});
+
 	$: if ($note && editableDiv) {
-		title.set($note.title);
-		content.set($note.content);
+		if (!contentLoaded) {
+			oldContent = $note.content;
+
+			vim.setEditableDiv(editableDiv);
+			suggestion.setEditableDiv(editableDiv);
+
+			if ($note.content) contentLoaded = true;
+		}
+
 		editableDiv.innerText = $note.content;
 	}
 
-	$: if (editableDiv) {
-		if (!contentLoaded) {
-			editableDiv.innerText = $content;
-			vim.setEditableDiv(editableDiv);
-			suggestion.setEditableDiv(editableDiv);
-			if (content) contentLoaded = true;
-		}
-	}
+	const saveNote = async () => {
+		const deltas = utils.delta(oldContent, editableDiv.innerText);
+		await utils.saveNote({ ...$notes[0], deltas });
+		oldContent = editableDiv.innerText;
+	};
 
 	const handleKeyDown = (event) => {
 		vim.keydown(event);
-		suggestion.keydown(event, (text) => content.set(text));
-	};
-
-	const handleInput = async () => {
-		if (!contentLoaded) return;
-		content.set(editableDiv.innerText);
-		await onContentChange();
+		suggestion.keydown(event);
 	};
 
 	const debouncedSaveNote = utils.debounce(async () => {
-		await utils.saveNote($notes[0]);
-	}, 1000);
+		await saveNote();
+	}, 500);
 
-	const onTitleChange = async () => {
+	const onTitleChange = async (e) => {
+		title = e.target.value;
 		notes.update((allNotes) => {
 			const noteIndex = allNotes.findIndex((n) => n.uuid === $note.uuid);
 			if (noteIndex > -1) {
-				let updatedNote = { ...allNotes[noteIndex], title: $title || 'New Note' };
+				let updatedNote = { ...allNotes[noteIndex], title };
 				allNotes.splice(noteIndex, 1); // Remove the note from its current position
 				allNotes.unshift(updatedNote); // Add it to the beginning
 			}
@@ -59,7 +67,7 @@
 		notes.update((allNotes) => {
 			const noteIndex = allNotes.findIndex((n) => n.uuid === $note.uuid);
 			if (noteIndex > -1) {
-				let updatedNote = { ...allNotes[noteIndex], content: $content };
+				let updatedNote = { ...allNotes[noteIndex], content: editableDiv.innerText };
 				allNotes.splice(noteIndex, 1); // Remove the note from its current position
 				allNotes.unshift(updatedNote); // Add it to the beginning
 			}
@@ -68,14 +76,14 @@
 		debouncedSaveNote();
 
 		if (!$autocomplete || vim.getMode() !== 'insert') return;
-		await suggestion.fetchSuggestion($content);
+		await suggestion.fetchSuggestion(title, editableDiv.innerText);
 	};
 </script>
 
 <div class="flex flex-col items-center justify-center h-5/6" class:open>
 	<div class="w-full h-full max-w-6xl shadow-lg rounded">
 		<input
-			bind:value={$title}
+			value={title}
 			class="w-full p-4 border-0 border-l border-r border-white shadow-sm bg-gray-900 text-2xl font-bold font-mono"
 			placeholder="Title"
 			on:input={onTitleChange}
@@ -88,7 +96,7 @@
 			class="editable-div w-full p-4 border-0 border-l border-r border-white h-full bg-gray-900 text-white font-mono"
 			placeholder="Start typing..."
 			style="font-size: {$size}px;"
-			on:input={handleInput}
+			on:input={onContentChange}
 			on:keydown={handleKeyDown}
 		/>
 	</div>

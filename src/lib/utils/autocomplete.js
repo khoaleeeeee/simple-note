@@ -10,16 +10,29 @@ export default function autocomplete({ editableDiv }) {
 			suggestionElement.remove();
 			suggestionElement = null;
 		}
-		document.removeEventListener('removeSuggestion', removeSuggestion);
 	};
 
 	const setEditableDiv = (newEditableDiv) => {
 		editableDiv = newEditableDiv;
 	};
 
-	const fetchSuggestion = debounce(async (content) => {
-		const lastSentence = getCurrentText(content);
-		const suggestion = await api.autocomplete(lastSentence);
+	// handle middle of the content case
+	const getTextBeforeCaret = () => {
+		const selection = window.getSelection();
+		let textBeforeCaret = '';
+		if (selection.rangeCount > 0) {
+			const range = selection.getRangeAt(0).cloneRange();
+			range.selectNodeContents(editableDiv);
+			range.setEnd(selection.getRangeAt(0).startContainer, selection.getRangeAt(0).startOffset);
+			textBeforeCaret = range.toString();
+		}
+		return textBeforeCaret;
+	};
+
+	const fetchSuggestion = debounce(async (title) => {
+		const textBeforeCaret = getTextBeforeCaret();
+		const lastSentence = getCurrentText(textBeforeCaret);
+		const suggestion = await api.autocomplete(title, lastSentence);
 
 		// Create the suggestion element
 		suggestionElement = document.createElement('span');
@@ -45,7 +58,7 @@ export default function autocomplete({ editableDiv }) {
 		}
 	}, 1000);
 
-	const acceptSuggestion = (func) => {
+	const acceptSuggestion = () => {
 		suggestionElement = editableDiv.querySelector('#suggestion');
 		if (suggestionElement) {
 			// Replace the suggestion span with its text content
@@ -60,8 +73,7 @@ export default function autocomplete({ editableDiv }) {
 			selection.removeAllRanges();
 			selection.addRange(range);
 
-			// Update your content store or variable
-			func(textNode.textContent);
+			document.dispatchEvent(new CustomEvent('insertSuggestion'));
 		}
 	};
 
@@ -87,11 +99,11 @@ export default function autocomplete({ editableDiv }) {
 		}
 	};
 
-	const keydown = (event, func) => {
+	const keydown = (event) => {
 		// Create a regex to match the suggestion with potential surrounding spaces
 		if (event.key === 'Tab' && suggestionElement) {
 			event.preventDefault();
-			acceptSuggestion(func);
+			acceptSuggestion();
 		} else if (suggestionElement) {
 			denySuggestion();
 		}

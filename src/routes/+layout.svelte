@@ -11,8 +11,8 @@
 	const getNotes = async () => {
 		try {
 			const result = await api.notes.get();
-			notes.set(result);
-			if (result.length > 0) note.set(result[0]);
+			notes.set(result || []);
+			if (result?.length > 0) note.set(result[0]);
 		} catch (err) {
 			console.log(err);
 			throw new Error(`Something wrong while getting notes`, err);

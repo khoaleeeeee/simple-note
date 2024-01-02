@@ -4,6 +4,7 @@
 	export let note;
 
 	function truncateContent(content, maxLength = 30) {
+		if (!content) return '';
 		return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
 	}
 
