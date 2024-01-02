@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const autocomplete = async (promptText) => {
+const autocomplete = async (title, promptText) => {
 	try {
-		const response = await axios.post('api/openai/autocomplete', { promptText });
+		const response = await axios.post('api/openai/autocomplete', { topic: title, promptText });
 		console.log(response.data);
 		return response.data;
 	} catch (error) {

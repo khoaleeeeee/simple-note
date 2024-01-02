@@ -14,7 +14,8 @@
 	const onNewNote = async () => {
 		const newNote = {
 			title: 'New Note',
-			content: ''
+			content: '',
+			deltas: []
 		};
 
 		notes.update((allNotes) => {

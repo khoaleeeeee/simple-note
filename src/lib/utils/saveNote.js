@@ -11,7 +11,9 @@ import api from '$lib/api';
  */
 const saveNote = async (note) => {
 	try {
-		const savedNote = await api.notes.add(note);
+		const savedNote = await api.notes.add({ ...note, content: '' });
+
+		savedNote.content = note.content;
 
 		notes.update((allNotes) => {
 			let updatedNotes = [...allNotes];
