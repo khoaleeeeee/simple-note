@@ -1,10 +1,10 @@
-import axios from 'axios';
+import http from '../http';
 
-const add = async (note) => {
+const add = async ({ note, user_uuid }) => {
 	try {
-		const resp = await axios.post('api/notes', {
+		const resp = await http.post('api/notes/add', {
 			...note,
-			user_uuid: 'e370b10c-91f7-4710-9e6d-a83eac251de6'
+			user_uuid
 		});
 		return resp.data;
 	} catch (error) {

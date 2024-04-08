@@ -1,15 +1,9 @@
 <script>
 	import Hamburger from './Hamburger.svelte';
 	import Slider from './Slider.svelte';
-	import { note, language, autocomplete, type, size, notes } from '$lib/stores';
+	import { note, autocomplete, size, notes } from '$lib/stores';
 	import utils from '$lib/utils';
 	import Switch from './Switch.svelte';
-
-	let selectedType = $type || 'note';
-	let selectedLanguage = $language || 'javascript';
-
-	$: type.set(selectedType);
-	$: language.set(selectedLanguage);
 
 	const onNewNote = async () => {
 		const newNote = {
@@ -54,24 +48,6 @@
 				<span class="text-white font-mono mr-2">Autocomplete</span>
 				<Switch bind:checked={$autocomplete} />
 			</div>
-			<!-- <div class="flex flex-row"> -->
-			<!-- 	<select -->
-			<!-- 		bind:value={selectedType} -->
-			<!-- 		class="mr-2 bg-white border border-gray-300 rounded px-2 focus:outline-none focus:ring-2 focus:ring-blue-500" -->
-			<!-- 	> -->
-			<!-- 		<option value="code">Code</option> -->
-			<!-- 		<option value="note">Note</option> -->
-			<!-- 	</select> -->
-			<!-- 	{#if $type === 'code'} -->
-			<!-- 		<select -->
-			<!-- 			bind:value={selectedLanguage} -->
-			<!-- 			class="mr-2 bg-white border border-gray-300 rounded px-2 focus:outline-none focus:ring-2 focus:ring-blue-500" -->
-			<!-- 		> -->
-			<!-- 			<option value="javascript">JavaScript</option> -->
-			<!-- 			<option value="python">Python</option> -->
-			<!-- 		</select> -->
-			<!-- 	{/if} -->
-			<!-- </div> -->
 
 			<div>
 				<button

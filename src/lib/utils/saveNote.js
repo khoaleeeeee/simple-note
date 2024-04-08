@@ -1,5 +1,7 @@
 import notes from '$lib/stores/notes';
 import api from '$lib/api';
+import { user } from '$lib/stores';
+import { get } from 'svelte/store';
 
 /**
  * Saves a note to the database
@@ -10,8 +12,9 @@ import api from '$lib/api';
  * @returns {Promise} - A promise that resolves when the note is saved
  */
 const saveNote = async (note) => {
+	const { uuid } = get(user);
 	try {
-		const savedNote = await api.notes.add({ ...note, content: '' });
+		const savedNote = await api.notes.add({ note: { ...note, content: '' }, user_uuid: uuid });
 
 		savedNote.content = note.content;
 

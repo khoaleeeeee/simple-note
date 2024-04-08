@@ -1,5 +1,6 @@
 <script>
 	import stores from '$lib/stores';
+	import user from '$lib/stores/user';
 	import api from '$lib/api';
 	export let note;
 
@@ -22,7 +23,7 @@
 	const onDelete = async () => {
 		stores.notes.update((notes) => notes.filter((n) => n.uuid !== note.uuid));
 		stores.note.set(stores.notes[0]);
-		await api.notes.remove(note);
+		await api.notes.remove({ note, user_uuid: $user.uuid });
 	};
 </script>
 

@@ -6,13 +6,13 @@ const config = {
 
 	server: {
 		host: true,
-		port: 8000,
-		proxy: {
-			'/api': {
-				target: 'http://localhost:8001'
-			}
-		}
+		port: 8000
 	}
+	// proxy: {
+	// 	'/api': {
+	// 		target: 'http://localhost:8001'
+	// 	}
+	// }
 };
 
 export default config;

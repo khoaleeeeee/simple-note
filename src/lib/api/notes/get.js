@@ -1,10 +1,10 @@
-import axios from 'axios';
+import http from '../http';
 
-const get = async (note) => {
+const get = async ({ user_uuid }) => {
 	try {
-		const resp = await axios.get('api/notes', {
+		const resp = await http.get('/api/notes', {
 			params: {
-				user_uuid: 'e370b10c-91f7-4710-9e6d-a83eac251de6'
+				user_uuid
 			}
 		});
 		return resp.data;

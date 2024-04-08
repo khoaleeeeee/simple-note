@@ -1,9 +1,11 @@
 import notes from './notes';
 import autocomplete from './autocomplete';
+import auth from './auth';
 
 export default {
 	notes,
-	autocomplete
+	autocomplete,
+	auth
 };
 
-export { notes, autocomplete };
+export { notes, autocomplete, auth };
