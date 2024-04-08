@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "rm -rf build && vite build",
 		"preview": "vite preview",
 		"lint": "prettier --plugin-search-dir . --check .",
 		"format": "prettier --plugin-search-dir . --write ."
@@ -23,6 +23,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-auto": "^3.2.0",
 		"axios": "^1.6.2",
 		"diff-match-patch": "^1.0.5",
 		"monaco-editor": "^0.45.0",
