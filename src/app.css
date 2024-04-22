@@ -5,6 +5,6 @@
 @layer components {
 	html,
 	body {
-		@apply h-full text-primary-light bg-primary-dark;
+		@apply h-full w-full text-primary-light bg-primary-dark;
 	}
 }

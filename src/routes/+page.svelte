@@ -31,7 +31,7 @@
 	});
 </script>
 
-<div class="h-full">
+<div>
 	<Topbar />
 	<Sidebar />
 	<Editor />

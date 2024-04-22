@@ -25,14 +25,14 @@
 
 <div class="sticky top-0 z-30" id="topbar">
 	<header class="flex justify-between bg-secondary-dark p-4 items-center text-gray-600 border-b-2">
-		<div class="flex justify-start">
+		<div class="flex flex-1 min-w-0">
 			<nav class="flex">
 				<Hamburger />
 			</nav>
 		</div>
 
-		<div class="w-1/5 flex flex-row">
-			<span class="text-white font-mono">Font size</span>
+		<div class="flex flex-1 justify-center min-w-0 hidden md:flex">
+			<span class="text-white font-mono mr-2">Font size</span>
 			<Slider
 				min={12}
 				max={24}
@@ -43,20 +43,17 @@
 			/>
 		</div>
 
-		<div class="flex flex-row w-1/3 justify-between items-center">
-			<div class="flex flex-row items-center">
+		<div class="flex flex-1 justify-end min-w-0">
+			<div class="flex items-center mr-4 hidden md:flex">
 				<span class="text-white font-mono mr-2">Autocomplete</span>
 				<Switch bind:checked={$autocomplete} />
 			</div>
-
-			<div>
-				<button
-					class="bg-primary-btn font-semibold hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-					on:click={onNewNote}
-				>
-					New Note
-				</button>
-			</div>
+			<button
+				class="bg-primary-btn font-semibold hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+				on:click={onNewNote}
+			>
+				New Note
+			</button>
 		</div>
 	</header>
 </div>

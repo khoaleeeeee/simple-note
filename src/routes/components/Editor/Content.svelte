@@ -4,13 +4,21 @@
 	import { onMount } from 'svelte';
 	import { size } from '$lib/stores';
 
+	let isMobile = false;
 	let editableDiv;
 	let oldContent;
-
-	const suggestion = utils.createAutocomplete({ editableDiv });
-	const vim = utils.createVim({ editableDiv });
+	let suggestion = null;
+	let vim = null;
 
 	onMount(() => {
+		const platform = navigator.platform.toLowerCase();
+		isMobile =
+			platform.includes('android') || platform.includes('iphone') || platform.includes('ipad');
+
+		if (isMobile) return;
+		suggestion = utils.createAutocomplete({ editableDiv });
+		vim = utils.createVim({ editableDiv });
+
 		document.addEventListener('removeSuggestion', suggestion.removeSuggestion);
 		document.addEventListener('insertSuggestion', saveNote);
 	});
@@ -19,8 +27,10 @@
 		oldContent = $note.content;
 		editableDiv.innerText = $note.content || '';
 
-		vim.setEditableDiv(editableDiv);
-		suggestion.setEditableDiv(editableDiv);
+		if (!isMobile) {
+			vim.setEditableDiv(editableDiv);
+			suggestion.setEditableDiv(editableDiv);
+		}
 	}
 
 	const saveNote = async () => {
@@ -30,6 +40,7 @@
 	};
 
 	const handleKeyDown = (event) => {
+		if (isMobile) return;
 		vim.keydown(event);
 		suggestion.keydown(event);
 	};
