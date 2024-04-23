@@ -12,14 +12,14 @@
 			deltas: []
 		};
 
+		const saved = await utils.saveNote(newNote);
+		$note = saved;
+
 		notes.update((allNotes) => {
 			let updatedNotes = [...allNotes];
-			updatedNotes.unshift(newNote);
+			updatedNotes.unshift(saved);
 			return updatedNotes;
 		});
-
-		await utils.saveNote(newNote);
-		note.set($notes[0]);
 	};
 </script>
 
