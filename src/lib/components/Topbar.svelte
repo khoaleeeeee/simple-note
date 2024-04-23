@@ -1,5 +1,6 @@
 <script>
 	import Hamburger from './Hamburger.svelte';
+	import AvatarDropdown from './AvatarDropdown.svelte';
 	import Slider from './Slider.svelte';
 	import { note, autocomplete, size, notes } from '$lib/stores';
 	import utils from '$lib/utils';
@@ -28,6 +29,7 @@
 		<div class="flex flex-1 min-w-0">
 			<nav class="flex">
 				<Hamburger />
+				<AvatarDropdown />
 			</nav>
 		</div>
 

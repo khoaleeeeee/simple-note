@@ -27,6 +27,8 @@
 		} else {
 			$user.uuid = userUuid;
 		}
+
+		$user = await api.users.get($user.uuid);
 		await getNotes();
 	});
 </script>
