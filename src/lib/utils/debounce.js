@@ -1,12 +1,18 @@
 const debounce = (func, wait) => {
 	let timeout;
-	return function (...args) {
-		const later = () => {
+	return (...args) => {
+		return new Promise((resolve, reject) => {
+			const later = () => {
+				clearTimeout(timeout);
+				try {
+					resolve(func.apply(this, args));
+				} catch (e) {
+					reject(e);
+				}
+			};
 			clearTimeout(timeout);
-			func.apply(this, args);
-		};
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
+			timeout = setTimeout(later, wait);
+		});
 	};
 };
 
