@@ -4,9 +4,11 @@
 	import { note, notes } from '$lib/stores';
 
 	$: open = $sidebar.expanded;
+	let activeNote = $notes[0];
 
 	const updateContentAndTitle = (selected) => {
 		note.set(selected);
+		activeNote = selected;
 	};
 </script>
 
@@ -21,7 +23,7 @@
 			{#each $notes as note}
 				<li>
 					<button on:click={() => updateContentAndTitle(note)} class="menu-item">
-						<NoteCard {note} />
+						<NoteCard {note} {activeNote} />
 					</button>
 				</li>
 			{/each}

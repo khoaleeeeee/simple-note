@@ -1,15 +1,19 @@
 <script>
+	import { get } from 'svelte/store';
 	import stores from '$lib/stores';
 	import user from '$lib/stores/user';
 	import api from '$lib/api';
 	export let note;
+	export let activeNote;
 
-	function truncateContent(content, maxLength = 30) {
+	$: highlighted = activeNote && activeNote.uuid === note.uuid;
+
+	const truncateContent = (content, maxLength = 30) => {
 		if (!content) return '';
 		return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
-	}
+	};
 
-	function formatDate(timestamp) {
+	const formatDate = (timestamp) => {
 		const date = new Date(timestamp);
 		return date.toLocaleDateString('en-US', {
 			year: 'numeric',
@@ -18,7 +22,7 @@
 			hour: '2-digit',
 			minute: '2-digit'
 		});
-	}
+	};
 
 	const onDelete = async () => {
 		stores.notes.update((notes) => notes.filter((n) => n.uuid !== note.uuid));
@@ -28,7 +32,9 @@
 </script>
 
 <div
-	class="relative p-2 min-h-32 min-w-full border border-gray-300 rounded-lg shadow-sm bg-white cursor-pointer hover:text-gray-800 hover:bg-gray-200"
+	class="relative p-2 min-h-32 min-w-full border {highlighted
+		? 'border-gray-500 bg-gray-200'
+		: 'border-gray-300 bg-white'} rounded-lg shadow-sm cursor-pointer hover:text-gray-800 hover:bg-gray-200"
 >
 	<button
 		class="absolute font-bold top-0 right-0 m-2 text-gray-600 hover:text-gray-800"
