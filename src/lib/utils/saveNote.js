@@ -1,4 +1,3 @@
-import notes from '$lib/stores/notes';
 import api from '$lib/api';
 import { user } from '$lib/stores';
 import { get } from 'svelte/store';
@@ -15,16 +14,6 @@ const saveNote = async (note) => {
 	const { uuid } = get(user);
 	try {
 		const savedNote = await api.notes.add({ note: { ...note, content: '' }, user_uuid: uuid });
-
-		savedNote.content = note.content;
-
-		notes.update((allNotes) => {
-			let updatedNotes = [...allNotes];
-			if (updatedNotes[0]) {
-				updatedNotes[0] = savedNote;
-			}
-			return updatedNotes;
-		});
 
 		return savedNote;
 	} catch (error) {

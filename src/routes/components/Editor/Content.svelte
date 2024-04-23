@@ -47,14 +47,17 @@
 
 	const debouncedSaveNote = utils.debounce(async () => {
 		await saveNote();
-	}, 500);
+	}, 1000);
 
 	const getAutoComplete = async () => {
 		if (!$autocomplete || vim.getMode() !== 'insert') return;
 		await suggestion.fetchSuggestion($title, editableDiv.innerText);
 	};
 
+	let saveInProgress = false;
 	const onContentChange = async () => {
+		if (saveInProgress) return;
+		saveInProgress = true;
 		notes.update((allNotes) => {
 			const noteIndex = allNotes.findIndex((n) => n.uuid === $note.uuid);
 			if (noteIndex > -1) {
@@ -64,8 +67,9 @@
 			}
 			return allNotes;
 		});
-		debouncedSaveNote();
+		await debouncedSaveNote();
 		await getAutoComplete();
+		saveInProgress = false;
 	};
 </script>
 
