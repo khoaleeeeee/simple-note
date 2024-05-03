@@ -54,10 +54,7 @@
 		await suggestion.fetchSuggestion($title, editableDiv.innerText);
 	};
 
-	let saveInProgress = false;
 	const onContentChange = async () => {
-		if (saveInProgress) return;
-		saveInProgress = true;
 		notes.update((allNotes) => {
 			const noteIndex = allNotes.findIndex((n) => n.uuid === $note.uuid);
 			if (noteIndex > -1) {
@@ -67,9 +64,8 @@
 			}
 			return allNotes;
 		});
-		await debouncedSaveNote();
+		// await debouncedSaveNote();
 		await getAutoComplete();
-		saveInProgress = false;
 	};
 </script>
 
@@ -87,6 +83,7 @@
 	style="font-size: {$size}px;"
 	on:input={onContentChange}
 	on:keydown={handleKeyDown}
+	on:keyup={debouncedSaveNote}
 />
 
 <style>
