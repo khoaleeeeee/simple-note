@@ -1,7 +1,9 @@
 <script>
-	import Google from '$lib/components/authentication/Google.svelte';
+	import TopBar from '$lib/components/authentication/TopBar.svelte';
+	import Login from '$lib/components/authentication/Login.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 </script>
 
-<div class="flex flex-col items-center justify-center min-h-screen">
-	<Google />
-</div>
+<TopBar />
+<Login />
+<Footer />

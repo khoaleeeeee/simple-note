@@ -14,10 +14,7 @@
 
 		try {
 			const user = await exchangeToken(code);
-
-			localStorage.setItem('user_uuid', user.uuid);
 			stores.user.set(user);
-
 			goto('/');
 
 			return { status: 200, body: user };

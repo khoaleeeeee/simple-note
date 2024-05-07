@@ -12,24 +12,32 @@
 	};
 </script>
 
-<aside class="fixed bg-third-dark shadow-lg overflow-auto w-1/4 h-full" class:open>
-	{#if $notes.length === 0}
-		<div class="w-full justify-center flex flex-row mt-20">
-			<span class=" items-center text-xl"> No Notes Yet! </span>
-		</div>
+<div>
+	{#if $sidebar.expanded}
+		<div class="fixed inset-0 bg-black bg-opacity-50 z-40 sm:block md:hidden" />
 	{/if}
-	<nav class="pt-3">
-		<ul>
-			{#each $notes as note}
-				<li>
-					<button on:click={() => updateContentAndTitle(note)} class="menu-item">
-						<NoteCard {note} {activeNote} />
-					</button>
-				</li>
-			{/each}
-		</ul>
-	</nav>
-</aside>
+	<aside
+		class="fixed h-full z-40 bg-third-light dark:bg-third-dark shadow-lg overflow-auto lg:w-1/4 md:3/4 sm:w-4/5"
+		class:open
+	>
+		{#if $notes.length === 0}
+			<div class="w-full justify-center flex flex-row mt-20">
+				<span class=" items-center text-xl"> No Notes Yet! </span>
+			</div>
+		{/if}
+		<nav class="pt-3">
+			<ul>
+				{#each $notes as note}
+					<li>
+						<button on:click={() => updateContentAndTitle(note)} class="menu-item">
+							<NoteCard {note} {activeNote} />
+						</button>
+					</li>
+				{/each}
+			</ul>
+		</nav>
+	</aside>
+</div>
 
 <style lang="postcss">
 	aside {

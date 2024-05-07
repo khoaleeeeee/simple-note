@@ -4,10 +4,12 @@ import content from './content';
 import title from './title';
 import notes from './notes';
 import note from './note';
-import autocomplete from './autocomplete';
 import user from './user';
+import settings from './settings';
+import modals from './modals';
 
 const index = {
+	modals,
 	user,
 	sidebar,
 	size,
@@ -15,7 +17,7 @@ const index = {
 	title,
 	notes,
 	note,
-	autocomplete
+	settings
 };
 
-export { index as default, note, sidebar, size, title, content, notes, autocomplete, user };
+export { index as default, modals, note, sidebar, size, title, content, notes, user, settings };

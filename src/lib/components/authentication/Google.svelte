@@ -1,4 +1,5 @@
 <script>
+	import { GoogleSolid } from 'flowbite-svelte-icons';
 	const redirect = () => {
 		const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 		const redirectUri = encodeURIComponent(import.meta.env.VITE_GOOGLE_REDIRECT_URI);
@@ -17,7 +18,8 @@
 
 <button
 	on:click={redirect}
-	class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+	class="flex gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold font-mono py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 >
+	<GoogleSolid class="w-6 h-6" />
 	Sign In with Google
 </button>

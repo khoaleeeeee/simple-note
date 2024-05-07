@@ -23,7 +23,6 @@ const generateDeltas = (oldText, newText) => {
 		}
 	}
 
-	console.log(deltas);
 	return deltas;
 };
 

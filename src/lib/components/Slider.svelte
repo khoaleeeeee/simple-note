@@ -168,10 +168,13 @@
 		on:mousedown={onTrackEvent}
 		on:touchstart={onTrackEvent}
 	>
-		<div class="range__track" bind:this={container}>
-			<div class="range__track--highlighted" bind:this={progressBar} />
+		<div class="range__track bg-gray-200 dark:bg-gray-300" bind:this={container}>
 			<div
-				class="range__thumb"
+				class="range__track--highlighted bg-slider-light dark:bg-slider-dark"
+				bind:this={progressBar}
+			/>
+			<div
+				class="range__thumb bg-white dark:bg-gray-300"
 				class:range__thumb--holding={holding}
 				bind:this={thumb}
 				on:touchstart={onDragStart}
@@ -180,7 +183,11 @@
 				on:mouseout={() => (thumbHover = false)}
 			>
 				{#if holding || thumbHover}
-					<div class="range__tooltip" in:fly={{ y: 7, duration: 200 }} out:fade={{ duration: 100 }}>
+					<div
+						class="range__tooltip bg-slider-light dark:bg-slider-dark"
+						in:fly={{ y: 7, duration: 200 }}
+						out:fade={{ duration: 100 }}
+					>
 						{value}
 					</div>
 				{/if}
@@ -224,13 +231,10 @@
 
 	.range__track {
 		height: 6px;
-		background-color: var(--track-bgcolor, #d0d0d0);
 		border-radius: 999px;
 	}
 
 	.range__track--highlighted {
-		background-color: var(--track-highlight-bgcolor, #6185ff);
-		background: var(--track-highlight-bg, linear-gradient(90deg, #6185ff, #9c65ff));
 		width: 0;
 		height: 6px;
 		position: absolute;
@@ -244,7 +248,6 @@
 		position: absolute;
 		width: 20px;
 		height: 20px;
-		background-color: var(--thumb-bgcolor, white);
 		cursor: pointer;
 		border-radius: 999px;
 		margin-top: -8px;
@@ -270,8 +273,6 @@
 		padding: 4px 0;
 		border-radius: 4px;
 		text-align: center;
-		background-color: var(--tooltip-bgcolor, #6185ff);
-		background: var(--tooltip-bg, linear-gradient(45deg, #6185ff, #9c65ff));
 		transform: translateY(100%);
 	}
 
@@ -280,7 +281,6 @@
 		display: block;
 		position: absolute;
 		width: 7px;
-		background-color: var(--tooltip-bgcolor, #6185ff);
 		bottom: -3px;
 		left: calc(50% - 3px);
 		clip-path: polygon(0% 0%, 100% 100%, 0% 100%);

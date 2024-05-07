@@ -1,9 +1,14 @@
 <script>
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+
 	export let checked = false;
+	export let id = '';
 </script>
 
 <label class="switch">
-	<input type="checkbox" bind:checked />
+	<input type="checkbox" bind:checked on:change={() => dispatch('change', { id })} />
 	<span class="slider" />
 </label>
 

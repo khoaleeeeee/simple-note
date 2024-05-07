@@ -26,7 +26,7 @@
 
 <input
 	value={title}
-	class="w-full p-4 border-0 border-l border-r border-white shadow-sm bg-gray-900 text-2xl font-bold font-mono"
+	class="w-full p-4 focus:outline-none border-l-2 border-r-2 dark:border-gray-500 border-gray-800 shadow-sm text-2xl font-bold font-mono bg-gray-200 dark:bg-gray-900 dark:text-white text-black transition-colors duration-300 ease-in-out"
 	placeholder="Title"
 	on:input={onTitleChange}
 	disabled={$notes.length === 0}

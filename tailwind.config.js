@@ -6,7 +6,7 @@ export default {
 		'./src/**/*.{html,js,svelte,ts}',
 		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
 	],
-	darkMode: 'selector',
+	darkMode: 'class',
 	theme: {
 		extend: {
 			colors: {
@@ -15,7 +15,14 @@ export default {
 				'third-dark': '#2D333B',
 				'vs-dark': '#1E1E1E',
 				'primary-light': '#ADBAC7',
-				'primary-btn': '#7F74FF',
+				'primary-btn-dark': '#7F74FF',
+				'primary-btn-dark-hover': '#6D62E0',
+				'primary-btn': '#EF562F',
+				'primary-btn-hover': '#D94A26',
+				'secondary-light': '#F0F0F0',
+				'third-light': '#BFC9D2',
+				'slider-dark': '#6185ff',
+				'slider-light': '#EF562F',
 				// flowbite-svelte
 				primary: {
 					50: '#FFF5F2',

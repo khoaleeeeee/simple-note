@@ -1,9 +1,24 @@
 import api from '$lib/api';
+import user from '$lib/stores/user';
 import debounce from './debounce';
 import getCurrentText from './getCurrentText';
+import settings from '$lib/stores/settings';
 
 export default function autocomplete({ editableDiv }) {
+	let user_uuid;
+	let apiKey;
 	let suggestionElement;
+
+	const userUnsubscibe = user.subscribe((value) => {
+		user_uuid = value.uuid;
+	});
+
+	const settingsUnsubscribe = settings.subscribe((value) => {
+		apiKey = value.apiKey;
+	});
+
+	userUnsubscibe();
+	settingsUnsubscribe();
 
 	const removeSuggestion = () => {
 		if (suggestionElement) {
@@ -32,7 +47,7 @@ export default function autocomplete({ editableDiv }) {
 	const fetchSuggestion = debounce(async (title) => {
 		const textBeforeCaret = getTextBeforeCaret();
 		const lastSentence = getCurrentText(textBeforeCaret);
-		const suggestion = await api.autocomplete(title, lastSentence);
+		const suggestion = await api.autocomplete(title, lastSentence, user_uuid, apiKey);
 
 		// Create the suggestion element
 		suggestionElement = document.createElement('span');

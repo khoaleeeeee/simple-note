@@ -1,8 +1,9 @@
 <script>
-	import { autocomplete, notes, note, title } from '$lib/stores';
+	import { notes, note, title } from '$lib/stores';
 	import utils from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { size } from '$lib/stores';
+	import settings from '$lib/stores/settings';
 
 	let isMobile = false;
 	let editableDiv;
@@ -10,28 +11,40 @@
 	let suggestion = null;
 	let vim = null;
 
+	// create vim if vim mode is enabled
+	$: if ($settings.enableVim && editableDiv) {
+		vim = utils.createVim({ editableDiv });
+	}
+
+	// create autocomplete if autocomplete is enabled
+	$: if ($settings.enableAutocomplete && editableDiv) {
+		suggestion = utils.createAutocomplete({ editableDiv });
+	}
+
+	// set the initial content of the editable div
+	$: if (editableDiv && $note) {
+		oldContent = $note.content;
+		editableDiv.innerText = $note.content || '';
+	}
+
+	// enable vim and autocomplete if vim mode is enabled
+	$: if (!isMobile) {
+		if ($settings.enableVim && vim) vim.setEditableDiv(editableDiv);
+		if ($settings.enableAutocomple) suggestion.setEditableDiv(editableDiv);
+	}
+
 	onMount(() => {
 		const platform = navigator.platform.toLowerCase();
 		isMobile =
 			platform.includes('android') || platform.includes('iphone') || platform.includes('ipad');
 
 		if (isMobile) return;
-		suggestion = utils.createAutocomplete({ editableDiv });
-		vim = utils.createVim({ editableDiv });
+		if ($settings.enableAutocomplete) suggestion = utils.createAutocomplete({ editableDiv });
+		if ($settings.enableVim) vim = utils.createVim({ editableDiv });
 
-		document.addEventListener('removeSuggestion', suggestion.removeSuggestion);
+		if (suggestion) document.addEventListener('removeSuggestion', suggestion.removeSuggestion);
 		document.addEventListener('insertSuggestion', saveNote);
 	});
-
-	$: if (editableDiv && $note) {
-		oldContent = $note.content;
-		editableDiv.innerText = $note.content || '';
-
-		if (!isMobile) {
-			vim.setEditableDiv(editableDiv);
-			suggestion.setEditableDiv(editableDiv);
-		}
-	}
 
 	const saveNote = async () => {
 		const deltas = utils.delta(oldContent, editableDiv.innerText);
@@ -41,8 +54,8 @@
 
 	const handleKeyDown = (event) => {
 		if (isMobile) return;
-		vim.keydown(event);
-		suggestion.keydown(event);
+		if ($settings.enableVim) vim.keydown(event);
+		if ($settings.enableAutocomplete) suggestion.keydown(event);
 	};
 
 	const debouncedSaveNote = utils.debounce(async () => {
@@ -50,8 +63,12 @@
 	}, 1000);
 
 	const getAutoComplete = async () => {
-		if (!$autocomplete || vim.getMode() !== 'insert') return;
-		await suggestion.fetchSuggestion($title, editableDiv.innerText);
+		if (!$settings.enableAutocomplete) {
+			if ($settings.enableVim && vim.getMode() !== 'insert') return;
+		}
+		if ($settings.enableAutocomplete) {
+			await suggestion.fetchSuggestion($title, editableDiv.innerText);
+		}
 	};
 
 	const onContentChange = async () => {
@@ -75,10 +92,10 @@
 	aria-label="content"
 	contenteditable="true"
 	bind:this={editableDiv}
-	class="editable-div w-full p-4 border-0 border-l border-r border-white h-full bg-gray-900 text-white font-mono {$notes.length !==
+	class="editable-div w-full p-4 border-0 border-l-2 border-r-2 border-gray-800 dark:border-gray-500 h-full font-mono {$notes.length !==
 	0
 		? ''
-		: 'pointer-events-none'}"
+		: 'pointer-events-none'} bg-gray-200 dark:bg-gray-900 dark:text-white text-black transition-colors duration-300 ease-in-out"
 	placeholder="Start typing..."
 	style="font-size: {$size}px;"
 	on:input={onContentChange}
