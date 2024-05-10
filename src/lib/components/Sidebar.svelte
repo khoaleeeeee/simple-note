@@ -14,10 +14,13 @@
 
 <div>
 	{#if $sidebar.expanded}
-		<div class="fixed inset-0 bg-black bg-opacity-50 z-40 sm:block md:hidden" />
+		<div
+			class="fixed inset-0 bg-black bg-opacity-50 z-40 sm:block md:hidden"
+			on:click={() => ($sidebar.expanded = false)}
+		/>
 	{/if}
 	<aside
-		class="fixed h-full z-40 bg-third-light dark:bg-third-dark shadow-lg overflow-auto lg:w-1/4 md:3/4 sm:w-4/5"
+		class="fixed h-full z-40 bg-third-light dark:bg-third-dark shadow-lg overflow-auto xl:w-1/4 sm:w-4/5"
 		class:open
 	>
 		{#if $notes.length === 0}

@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 const sidebar = writable({
-	expanded: true
+	expanded: false
 });
 
 export default sidebar;
