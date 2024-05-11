@@ -9,7 +9,7 @@
 	onMount(() => {
 		let theme = localStorage.getItem('color-theme');
 
-		logo = theme === 'dark' ? LogoDark : Logo;
+		logo = theme === 'light' ? Logo : LogoDark;
 
 		document.addEventListener('theme-changed', onThemeChange);
 	});
