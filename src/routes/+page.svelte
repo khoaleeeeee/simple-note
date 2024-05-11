@@ -6,6 +6,7 @@
 	import { note, notes, modals, user, settings } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import api from '$lib/api';
+	import { goto } from '$app/navigation';
 
 	const getNotes = async () => {
 		try {
@@ -55,8 +56,11 @@
 			await getSettings();
 			await getNotes();
 		} catch (err) {
-			console.error(err);
-			$modals.sessionExpired = true;
+			if (err.message.includes('401')) {
+				goto('/auth');
+			} else {
+				$modals.sessionExpired = true;
+			}
 		}
 	});
 </script>
