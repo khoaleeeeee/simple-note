@@ -12,7 +12,7 @@
 	<div class="m-10 items-start">
 		<Typewriter
 			mode="loopOnce"
-			interval="70"
+			interval="30"
 			on:done={() => {
 				titleTypeDone = true;
 			}}
@@ -23,7 +23,7 @@
 		</Typewriter>
 		{#if titleTypeDone}
 			<Typewriter
-				interval="50"
+				interval="10"
 				on:done={() => {
 					introTypeDone = true;
 				}}
@@ -36,7 +36,7 @@
 	</div>
 
 	{#if introTypeDone}
-		<div transition:fly={{ delay: 250, duration: 500 }}>
+		<div transition:fly={{ delay: 250, duration: 100 }}>
 			<Card class="transition-transform transform hover:scale-105">
 				<form class="flex flex-col space-y-6" action="/">
 					<h3 class="text-xl font-semibold font-mono text-gray-900 dark:text-white">
