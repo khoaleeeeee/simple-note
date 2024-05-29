@@ -44,6 +44,14 @@
 
 		if (suggestion) document.addEventListener('removeSuggestion', suggestion.removeSuggestion);
 		document.addEventListener('insertSuggestion', saveNote);
+
+		editableDiv.addEventListener('paste', onPaste);
+
+		return () => {
+			if (suggestion) document.removeEventListener('removeSuggestion', suggestion.removeSuggestion);
+			document.removeEventListener('insertSuggestion', saveNote);
+			editableDiv.removeEventListener('paste', onPaste);
+		};
 	});
 
 	const saveNote = async () => {
@@ -84,6 +92,11 @@
 		// await debouncedSaveNote();
 		await getAutoComplete();
 	};
+
+	const onPaste = async () => {
+		onContentChange();
+		debouncedSaveNote();
+	};
 </script>
 
 <div
@@ -92,7 +105,7 @@
 	aria-label="content"
 	contenteditable="true"
 	bind:this={editableDiv}
-	class="editable-div w-full p-4 border-0 border-l-2 border-r-2 border-gray-800 dark:border-gray-500 h-full font-mono {$notes.length !==
+	class="editable-div h-full w-full p-4 border-0 border-l-2 border-r-2 border-gray-800 dark:border-gray-500 font-mono {$notes.length !==
 	0
 		? ''
 		: 'pointer-events-none'} bg-gray-200 dark:bg-gray-900 dark:text-white text-black transition-colors duration-300 ease-in-out"

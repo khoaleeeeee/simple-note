@@ -6,8 +6,8 @@
 	$: open = $sidebar.expanded;
 </script>
 
-<div class="flex flex-col items-center justify-center" class:open>
-	<div class="w-full h-screen max-w-6xl shadow-lg rounded">
+<div class="flex flex-col grow items-center" class:open>
+	<div class="w-full h-full max-w-6xl shadow-lg rounded">
 		<Title />
 		<Content />
 	</div>

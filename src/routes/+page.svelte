@@ -65,7 +65,7 @@
 	});
 </script>
 
-<div>
+<div class="flex flex-col h-screen">
 	<Topbar />
 	<Sidebar />
 	<Editor />
