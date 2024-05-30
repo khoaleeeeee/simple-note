@@ -68,7 +68,7 @@
 
 	const debouncedSaveNote = utils.debounce(async () => {
 		await saveNote();
-	}, 1000);
+	}, 3000);
 
 	const getAutoComplete = async () => {
 		if (!$settings.enableAutocomplete) {
