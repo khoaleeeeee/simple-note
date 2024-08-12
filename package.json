@@ -29,6 +29,7 @@
 	"dependencies": {
 		"@sveltejs/adapter-auto": "^3.2.0",
 		"axios": "^1.6.2",
+		"crypto-js": "^4.2.0",
 		"diff-match-patch": "^1.0.5",
 		"monaco-editor": "^0.45.0",
 		"openai": "^4.24.1",
