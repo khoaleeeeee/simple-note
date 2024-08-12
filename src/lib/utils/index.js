@@ -3,14 +3,13 @@ import debounce from './debounce';
 import getCurrentText from './getCurrentText';
 import createVim from './vim';
 import createAutocomplete from './autocomplete';
-import delta from './delta';
+import note from './note';
 
 export default {
-	delta,
+	note,
 	createVim,
 	saveNote,
 	debounce,
 	createAutocomplete,
 	getCurrentText
 };
-export { delta, saveNote, debounce, getCurrentText };

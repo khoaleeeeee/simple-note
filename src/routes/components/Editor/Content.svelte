@@ -43,22 +43,16 @@
 		if ($settings.enableVim) vim = utils.createVim({ editableDiv });
 
 		if (suggestion) document.addEventListener('removeSuggestion', suggestion.removeSuggestion);
-		document.addEventListener('insertSuggestion', saveNote);
+		document.addEventListener('insertSuggestion', save);
 
 		editableDiv.addEventListener('paste', onPaste);
 
 		return () => {
 			if (suggestion) document.removeEventListener('removeSuggestion', suggestion.removeSuggestion);
-			document.removeEventListener('insertSuggestion', saveNote);
+			document.removeEventListener('insertSuggestion', save);
 			editableDiv.removeEventListener('paste', onPaste);
 		};
 	});
-
-	const saveNote = async () => {
-		const deltas = utils.delta(oldContent, editableDiv.innerText);
-		await utils.saveNote({ ...$notes[0], deltas });
-		oldContent = editableDiv.innerText;
-	};
 
 	const handleKeyDown = (event) => {
 		if (isMobile) return;
@@ -66,9 +60,11 @@
 		if ($settings.enableAutocomplete) suggestion.keydown(event);
 	};
 
-	const debouncedSaveNote = utils.debounce(async () => {
-		await saveNote();
-	}, 3000);
+	const save = utils.debounce(async () => {
+		const deltas = utils.note.delta(oldContent, editableDiv.innerText);
+		await utils.note.save({ ...$notes[0], deltas });
+		oldContent = editableDiv.innerText;
+	}, 1000);
 
 	const getAutoComplete = async () => {
 		if (!$settings.enableAutocomplete) {
@@ -89,13 +85,13 @@
 			}
 			return allNotes;
 		});
-		// await debouncedSaveNote();
+
 		await getAutoComplete();
 	};
 
 	const onPaste = async () => {
 		onContentChange();
-		debouncedSaveNote();
+		save();
 	};
 </script>
 
@@ -113,7 +109,7 @@
 	style="font-size: {$size}px;"
 	on:input={onContentChange}
 	on:keydown={handleKeyDown}
-	on:keyup={debouncedSaveNote}
+	on:keyup={save}
 />
 
 <style>

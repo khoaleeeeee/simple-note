@@ -3,21 +3,11 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Editor from './components/Editor/Editor.svelte';
 	import SessionExpired from '../lib/components/SessionExpired.svelte';
-	import { note, notes, modals, user, settings } from '$lib/stores';
+	import { modals, user, settings } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import api from '$lib/api';
 	import { goto } from '$app/navigation';
-
-	const getNotes = async () => {
-		try {
-			const result = await api.notes.get({ user_uuid: $user.uuid });
-			if (!result) return;
-			notes.set(result);
-			if (result.length > 0) note.set(result[0]);
-		} catch (err) {
-			throw new Error(`Something wrong while getting notes`, err);
-		}
-	};
+	import utils from '$lib/utils';
 
 	const getSettings = async () => {
 		try {
@@ -54,8 +44,9 @@
 			$user = await api.users.get();
 
 			await getSettings();
-			await getNotes();
+			await utils.note.get();
 		} catch (err) {
+			console.log(err);
 			if (err.message.includes('401')) {
 				goto('/auth');
 			} else {

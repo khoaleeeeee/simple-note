@@ -2,7 +2,7 @@ import { diff_match_patch } from 'diff-match-patch';
 
 const dmp = new diff_match_patch();
 
-const generateDeltas = (oldText, newText) => {
+const delta = (oldText, newText) => {
 	const diffs = dmp.diff_main(oldText, newText);
 	dmp.diff_cleanupSemantic(diffs);
 
@@ -18,12 +18,15 @@ const generateDeltas = (oldText, newText) => {
 			deltas.push({ operation: 'insert', index, text });
 			index += text.length;
 		} else if (op === -1) {
-			// Delete
-			deltas.push({ operation: 'delete', index, length: text.length });
+			deltas.push({
+				operation: 'delete',
+				index,
+				length: text.length
+			});
 		}
 	}
 
 	return deltas;
 };
 
-export default generateDeltas;
+export default delta;
